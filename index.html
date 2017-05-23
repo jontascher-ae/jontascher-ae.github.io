@@ -1,0 +1,86 @@
+<html>
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script>
+        (function($) {
+            $(function() {
+                calc();
+
+                $('body').on('submit', function() {
+                    calc();
+                    return false;
+                });
+            });
+
+            function is_rest_week(week, rest_week) {
+                return week % rest_week == 0;
+            }
+
+            function calc() {
+
+                $('#results tbody').empty();
+
+                var weeks = parseInt($('#number-weeks').val(), 10);
+                var miles = parseInt($('#base-miles').val(), 10);
+                var increase = parseInt($('#increase-rate').val(), 10) / 100;
+                var rest_week = parseInt($('#rest-week').val(), 10);
+                var week_miles = miles;
+
+                for (var week = 1; week <= weeks; week++) {
+                    if (is_rest_week(week, rest_week)) {
+                        week_miles = 10;
+                    } else {
+                        miles = (1 + increase) * miles;
+                        week_miles = miles;
+                    }
+                    week_miles = Math.round(week_miles * 10) / 10;
+
+                    var row = $('<tr></tr>');
+                    if (week) {
+                        row.append('<td>' + week + '</td>');
+                        row.append('<td>' + week_miles + '</td>');
+                        $('#results tbody').append(row);
+                    }
+                }
+            }
+        })(jQuery);
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <form>
+                    <div class="form-group">
+                        <label>Weekly Increase Rate:</label>
+                        <input class="form-control" type="number" name="increase-rate" id="increase-rate" value="10" />
+                    </div>
+                    <div class="form-group">
+                        <label>Number of Weeks:  </label>
+                        <input class="form-control" type="number" name="number-weeks" id="number-weeks" value="18" />
+                    </div>
+                    <div class="form-group">
+                        <label>Rest Week Frequency: </label>
+                        <input class="form-control" type="number" name="rest-week" id="rest-week" value="4" />
+                    </div>
+                    <div class="form-group">
+                        <label>Base Miles: </label>
+                        <input class="form-control" type="number" name="base-miles" id="base-miles" value="20" />
+                    </div>
+                    <button type="submit" class="btn btn-default">Submit</button>
+                </form>
+                <table id="results" class="table table-striped table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Week Number</th>
+                            <th>Milage</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
