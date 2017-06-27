@@ -25,11 +25,12 @@
                 var miles = parseInt($('#base-miles').val(), 10);
                 var increase = parseInt($('#increase-rate').val(), 10) / 100;
                 var rest_week = parseInt($('#rest-week').val(), 10);
+                var rest_week_miles = parseInt($('#rest-week-miles').val(), 10);
                 var week_miles = miles;
 
                 for (var week = 1; week <= weeks; week++) {
                     if (is_rest_week(week, rest_week)) {
-                        week_miles = 10;
+                        week_miles = rest_week_miles;
                     } else {
                         miles = (1 + increase) * miles;
                         week_miles = miles;
@@ -63,6 +64,10 @@
                     <div class="form-group">
                         <label>Rest Week Frequency: </label>
                         <input class="form-control" type="number" name="rest-week" id="rest-week" value="4" />
+                    </div>
+                    <div class="form-group">
+                        <label>Rest Week Miles: </label>
+                        <input class="form-control" type="number" name="rest-week-miles" id="rest-week-miles" value="10" />
                     </div>
                     <div class="form-group">
                         <label>Base Miles: </label>
