@@ -1,0 +1,125 @@
+<html>
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script>
+        "use strict";
+
+        (function($) {
+            $(function() {
+                const form = $('form');
+                const questions = {
+                    'The Runner' : [
+                        ['First name?', 'text'],
+                        ['Age?', 'text'],
+                        ['Where are you from?', 'text'],
+                        ['Occupation?', 'text']
+                    ],
+                    'Running Q&A\'s' : [
+                        ['What are your PR\'s?', 'textarea'],
+                        ['What is your distance PR?', 'textarea'],
+                        ['What\'s your highest weekly recorded milage?', 'textarea'],
+                        ['What\'s your comfy pace?', 'textarea'],
+                        ['How long have you been running?', 'textarea'],
+                        ['Tell us why you began running?', 'textarea'],
+                        ['Most memorable running moment?', 'textarea'],
+                        ['Do you have a running mantra?', 'textarea'],
+                        ['What time of day do you prefer to run?', 'textarea'],
+                        ['Any big races coming up?', 'textarea'],
+                        ['What are your short-term running goals?', 'textarea'],
+                        ['What are your long-term running goals?', 'textarea'],
+                        ['What\'s one piece of running advice you’d give to the younger version of yourself?', 'textarea'],
+                        ['What is something you need to work on to become a better runner?', 'textarea'],
+                        ['What is your current shoe choice?', 'textarea'],
+                        ['Trail? Road? Track? Or Treadmill?', 'textarea'],
+                        ['What is your ideal running weather?', 'textarea'],
+                        ['Do you have any social media accounts you’d like to share? [Facebook, Strava, Twitter]', 'textarea'],
+                    ],
+                    'Just For Fun' : [
+                        ['What’s your spirit animal?', 'textarea'],
+                        ['What hobbies and interests do you have besides running?', 'textarea'],
+                        ['Do you have any hidden talents?', 'textarea'],
+                        ['Biggest pet peeve?', 'textarea'],
+                        ['Dream job! What would it be?', 'textarea'],
+                        ['Favorite Quote or Poem?', 'textarea'],
+                        ['What is your favorite movie?', 'textarea'],
+                        ['What is your biggest character flaw?', 'textarea'],
+                        ['What songs have you been listening to recently?', 'textarea'],
+                        ['What are some of your favorite non-running subreddits?', 'textarea']
+                    ],
+                    'One Last Question' : [
+                        ['What is the origin of your username?', 'textarea']
+                    ]
+                };
+
+                for (var i in questions) {
+                    const section = questions[i];
+                    const section_div = $('<div class="section-div" />');
+                    section_div.append('<h2>' + i + ':</h2>');
+
+                    $(section).each(function(j, question) {
+                        section_div.append(createInput(question));
+                    });
+                    form.append(section_div);
+                }
+
+                form.append('<button type="submit" class="btn btn-default">Submit</button>');
+
+                $('body').on('submit', function() {
+                    var markup = "_____\n_____\n\n";
+
+                    $('.section-div').each(function(i, section) {
+                        section = $(section);
+                        markup += '###**' + section.find('h2').eq(0).text() + "**\n\n";
+                        section.find('.form-group').each(function(i, question) {
+                            question = $(question);
+                            markup += '**' + question.find('label').eq(0).text() + "**\n\n";
+                            markup += '> ' + question.find('input, textarea').eq(0).val() + "\n\n";
+                        });
+                        markup += "_____\n_____\n\n";
+                    });
+                    $('#complete').find('textarea').eq(0).val(markup);
+                    $('#complete').show();
+                       $("html, body").animate({
+                           scrollTop: $(window).height()
+                      }, 1000);
+                    return false;
+                });
+
+                $('body').on('focus', '#complete textarea', function() {
+                    $(this).select();
+                });
+            });
+
+            function createInput(question) {
+                var html = '<div class="form-group">';
+                html += '<label>' + question[0] + '</label>';
+                if (question[1] == 'text') {
+                    html += '<input class="form-control" type="text" />';
+                } else if (question[1] == 'textarea') {
+                    html += '<textarea class="form-control" rows="6"></textarea>';
+                }
+                html += '</div>';
+                return html;
+            }
+        })(jQuery);
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <form></form>
+            </div>
+        </div>
+        <div id="complete" class="row" style="display: none">
+            <div class="col-md-12">
+                <h2>All Done!</h2>
+                <div class="form-group">
+                    <label>Copy the text below and then DM it to <a href="https://www.reddit.com/user/YourShoesUntied">u/YourShoesUntied</a></label>
+                    <textarea class="form-control" rows="25"></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
