@@ -108,7 +108,19 @@
 
                 crossword.render($('#crossword'));
 
-                $('body').on('focus', '.cell', function() {
+                $('body').on('change', '.cell', function() {
+                    var row;
+                    var cell;
+
+                    [row, cell] = $(this).attr('id').split('-');
+
+                    row = crossword.getRow(row);
+                    cell = row.getCell(cell);
+
+                    cell.value = $(this).val();
+                });
+
+                $('body').on('dblclick', '.cell', function() {
                     var row;
                     var cell;
 
