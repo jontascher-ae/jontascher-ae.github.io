@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+<head>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+
+    <script>
+        "use strict";
+
+        function Crossword() {
+            this.rows = [];
+
+            this.addRow = function(row) {
+                this.rows.push(row);
+            }
+
+            this.getRow = function(row_number) {
+                for (var i = 0; i < this.rows.length; i++) {
+                    if (this.rows[i].row_number == row_number) {
+                        return this.rows[i];
+                    }
+                };
+            }
+
+            this.render = function(element) {
+                element.html(this.toString());
+            }
+
+            this.toString = function() {
+                var table = $('<table class="table-bordered" />');
+                this.rows.forEach(function(row) {
+                    table.append(row.toString());
+                });
+
+                return table;
+            }
+        }
+
+        function Row(row_number) {
+            this.row_number = row_number;
+            this.cells = [];
+
+            this.addCell = function(cell) {
+                this.cells.push(cell);
+            }
+
+            this.getCell = function(column_number) {
+                for (var i = 0; i < this.cells.length; i++) {
+                    if (this.cells[i].column_number == column_number) {
+                        return this.cells[i];
+                    }
+                };
+            }
+
+            this.toString = function() {
+                var tr = $('<tr id="row-' + this.row_number + '" />');
+                this.cells.forEach(function(cell) {
+                    tr.append(cell.toString());
+                });
+                return tr;
+            }
+        }
+
+        function Cell(row_number, column_number) {
+            this.row_number = row_number;
+            this.column_number = column_number;
+            this.value = '';
+            this.black = false;
+
+            this.toString = function() {
+                var td = $('<td />');
+                td.append('<input id="' + this.row_number + '-' + this.column_number + '" class="cell ' + (this.black ? 'black' : '') + '" type="text" value="' + this.value + '" />');
+                return td;
+            }
+
+            this.toggleBlack = function() {
+                this.black = !this.black;
+                this.findMirror().black = this.black;
+            }
+
+            this.findMirror = function() {
+                var row = crossword.getRow(15 - this.row_number);
+                return row.getCell(15 - this.column_number);
+            }
+        }
+
+        var crossword = new Crossword();
+
+        (function($) {
+            $(function() {
+                const rows = 16;
+                const cols = 16;
+
+                for (var i = 0; i < rows; i++) {
+                    var row = new Row(i)
+
+                    for (var j = 0; j < cols; j++) {
+                        var cell = new Cell(i, j);
+                        row.addCell(cell);
+                    }
+
+                    crossword.addRow(row);
+                }
+
+                crossword.render($('#crossword'));
+
+                $('body').on('focus', '.cell', function() {
+                    var row;
+                    var cell;
+
+                    [row, cell] = $(this).attr('id').split('-');
+
+                    row = crossword.getRow(row);
+                    cell = row.getCell(cell);
+
+                    cell.toggleBlack();
+
+                    crossword.render($('#crossword'));
+
+
+                })
+            });
+        })(jQuery);
+    </script>
+
+    <style>
+        body {
+            padding-top:30px;
+        }
+        .table-bordered td {
+            width:35px;
+            height:35px;
+            border: 2px solid #000000;
+        }
+
+        .table-bordered td input {
+            padding:0;
+            text-align:center;
+            line-height:35px;
+            width:100%;
+            height:100%;
+            text-transform: uppercase;
+        }
+
+        .table-bordered td input.black {
+            background-color:#000000;
+        }
+
+        .table-bordered td input:focus {
+            outline:0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div id="crossword"></div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
