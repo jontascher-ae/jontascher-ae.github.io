@@ -47,8 +47,8 @@
                       // a successful payment.
                       // Instead use one of the strategies described in
                       // https://stripe.com/docs/payments/checkout/fulfillment
-                      successUrl: 'https://www.facebook.com/groups/2765710566833779/success',
-                      cancelUrl: 'https://www.facebook.com/groups/2765710566833779/canceled',
+                      successUrl: 'https://gtrc.run/dues-success',
+                      cancelUrl: 'https://gtrc.run/dues-error',
                     })
                     .then(function (result) {
                       if (result.error) {
